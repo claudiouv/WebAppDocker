@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  mysql:
+    image: "mysql:5.7"
+    build: mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - public
+    deploy:
+      replicas: 1
+    depends_on:
+      - mysql
+
+networks:
+  public:
+    driver: overlay
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.2.0.0/24
