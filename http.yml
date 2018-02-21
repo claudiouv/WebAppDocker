@@ -1,0 +1,28 @@
+version: "3"
+
+
+networks:
+  public:
+    driver: overlay
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.1.0.0/24
+
+
+services:
+  http:
+    image: emilevauge/whoami
+    networks:
+      - traefik_public
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.backend=http"
+        - "traefik.port=80"
+        - "traefik.frontend.rule=PathPrefixStrip:/http/"
+        - "traefik.docker.network=traefik_public"
+
+networks:
+  traefik_public:
+    external: true
